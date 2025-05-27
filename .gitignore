@@ -1,0 +1,61 @@
+# ========== ОС і IDE ==========
+.DS_Store
+Thumbs.db
+*.log
+
+# VSCode
+.vscode/
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+out/
+
+# ========== Python ==========
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+env.bak/
+*.env
+
+# Pipenv
+Pipfile.lock
+
+# Pytest cache
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# ========== Node.js ==========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production build
+dist/
+build/
+
+# dotenv environment variables file
+.env
+
+# ========== Docker ==========
+# Ignore Docker image layers and temp files if any
+**/Dockerfile.*
+docker-compose.override.yml
+
+# Ignore Docker volumes and containers (if accidentally added)
+*.tar
+*.tar.gz
+
+# ========== Misc ==========
+*.swp
+*.swo
+*.bak
+*.tmp
+*.backup
