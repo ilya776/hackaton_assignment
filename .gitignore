@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.env
+.DS_Store
+hacathon.iml
+node_modules/
+dist/
+*.log
+postgres_data/
