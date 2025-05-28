@@ -3,12 +3,12 @@ import {
   Navigate,
   Outlet
 } from 'react-router';
-import { ROUTES_NAMES } from './routesNames';
+import { APP_ROUTES_NAMES } from './AppRouterNames';
 
 const ProtectedRoutes: FC = () => {
   const auth = true; //check auth
 
-  return auth ? <Outlet /> : <Navigate to={ROUTES_NAMES.Auth} />;
+  return auth ? <Outlet /> : <Navigate to={APP_ROUTES_NAMES.Auth} />;
 };
 
 export { ProtectedRoutes };

@@ -1,28 +1,34 @@
+import Layout from "@/layout/Layout";
 import { ProtectedRoutes } from "./ProtectedRoutes";
-import { ROUTES_NAMES } from "./routesNames";
+import { APP_ROUTES_NAMES } from "./AppRouterNames";
 
 const AppRouter = [
   {
     element: <>Auth</>,
-    path: ROUTES_NAMES.Auth,
+    path: APP_ROUTES_NAMES.Auth,
   },
   {
-    element: <ProtectedRoutes/>,
+    element: <Layout />,
     children: [
       {
-        element: <>Profile</>,
-        path: ROUTES_NAMES.Profile,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            element: <>Profile</>,
+            path: APP_ROUTES_NAMES.Profile,
+          },
+          {
+            element: <>Library</>,
+            path: APP_ROUTES_NAMES.Root,
+          },
+          {
+            element: <>BookId</>,
+            path: APP_ROUTES_NAMES.Book + ":bookId",
+          },
+        ],
       },
-      {
-        element: <>Library</>,
-        path: ROUTES_NAMES.Root,
-      },
-      {
-        element: <>Book</>,
-        path: ROUTES_NAMES.Book + ":bookId",
-      },
-    ]
-  }
+    ],
+  },
 ];
 
 export { AppRouter };

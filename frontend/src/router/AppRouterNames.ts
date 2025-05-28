@@ -1,4 +1,4 @@
-export const ROUTES_NAMES = {
+export const APP_ROUTES_NAMES = {
   Auth: "/auth",
   Profile: "/profile",
   Root: "/",

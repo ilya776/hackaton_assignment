@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+  --color-gr-light:  #e4fbe1;  
+  --color-gr-lightest: #f6fff4; 
+  --color-gr-dark:    #6d8d6d;  
+  --color-gr-darkest:  #3d5c3d;  
+}
