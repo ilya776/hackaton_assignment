@@ -1,13 +1,11 @@
-import './App.css'
+import { createBrowserRouter, RouterProvider } from "react-router";
+import "./App.css";
+import { AppRouter } from "./router/AppRouter";
 
-import SignIn from "@/modules/auth/components/SignIn.tsx";
+const router = createBrowserRouter(AppRouter);
 
 function App() {
-  return (
-    <>
-      <SignIn/>
-    </>
-  )
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
-export default App
+export default App;
