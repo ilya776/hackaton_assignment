@@ -1,7 +1,7 @@
+import AuthForm from "@/modules/auth/components/AuthForm.tsx";
+
 const AuthPage = () => {
-  return (
-    <div>AuthPage</div>
-  )
+  return <AuthForm />
 }
 
 export default AuthPage

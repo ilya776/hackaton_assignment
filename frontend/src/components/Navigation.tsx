@@ -1,29 +1,39 @@
 import { APP_ROUTES_NAMES } from "@/router/AppRouterNames";
 import type { FC } from "react";
 import { Link } from "react-router";
+import { MdDashboard } from "react-icons/md";
+import { FaBookOpen } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
 
 const routes = [
   {
     to: APP_ROUTES_NAMES.Root,
-    name: "Бібліотека",
+    name: "Dashboard",
+    icon : <MdDashboard/>,
   },
   {
     to: APP_ROUTES_NAMES.Profile,
-    name: "Профіль",
+    name: "My Collections",
+    icon: <FaBookOpen/>,
+  },
+  {
+    to:'',
+    name: "Favourites",
+    icon: <FaBookmark/>,
   },
 ];
 
 const Navigation:FC = () => {
   return (
-    <nav className="flex justify-end gap-3 xs:gap-5 md:gap-8 items-center font-semibold">
+    <nav className="flex mt-15 flex-col justify-end gap-3 items-start font-semibold">
       {routes.map((item) => {
         return (
           <Link
             key={item.name}
             to={item.to}
-            className="cursor-pointer text-gr-darkest text-2xl"
+            className="cursor-pointer space-x-3 bg-[#3d5c3d] text-[#ddf5d7] w-[250px] rounded-[15px] flex items-center  h-[50px] text-2xl pl-4 whitespace-nowrap overflow-hidden text-ellipsis"
           >
-            {item.name}
+            {item.icon} <p>{item.name}</p>
           </Link>
         );
       })}
