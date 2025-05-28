@@ -30,6 +30,16 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',         # Назва бази
+        'USER': 'postgres',         # Користувач
+        'PASSWORD': '12345678',     # Пароль
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,21 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',         # Назва бази
-        'USER': 'postgres',         # Користувач
-        'PASSWORD': '12345678',     # Пароль
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

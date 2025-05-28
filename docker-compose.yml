@@ -1,0 +1,84 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    expose:
+      - "5432"  # do NOT publish to host in production
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/django/Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - backend
+    user: "1000:1000"  # avoid running as root
+    read_only: true     # container filesystem is read-only
+    security_opt:
+      - no-new-privileges:true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/react/Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - frontend
+    user: "1000:1000"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - backend
+      - frontend
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+  frontend:
