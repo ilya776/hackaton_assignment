@@ -1,9 +1,29 @@
 import { useState } from "react";
-import type { FC } from "react";
+import { login,type LoginData } from "../services/logInService.ts";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
-const SignIn: FC = () => {
+const SignIn = () => {
+    const [form, setForm] = useState<LoginData>({ email: "", password: "" });
+    const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+
+        try {
+            const data = await login(form);
+            localStorage.setItem("accessToken", data.tokens.access);
+            alert("Успішний вхід!");
+            // Далі можна редірект або оновлення стану
+        } catch (err: any) {
+            setError(err.response?.data?.detail || "Сталася помилка");
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#f6fff4] text-[#3d5c3d] py-4">
@@ -15,11 +35,14 @@ const SignIn: FC = () => {
                     </p>
                 </div>
 
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <label className="block">
                         <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Email</span>
                         <input
+                            name="email"
                             type="email"
+                            value={form.email}
+                            onChange={handleChange}
                             placeholder="you@example.com"
                             className="w-full px-4 py-3 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
                             required
@@ -29,7 +52,10 @@ const SignIn: FC = () => {
                     <label className="block relative">
                         <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Пароль</span>
                         <input
+                            name="password"
                             type={showPassword ? "text" : "password"}
+                            value={form.password}
+                            onChange={handleChange}
                             placeholder="********"
                             className="w-full px-4 py-3 pr-12 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
                             required
@@ -55,25 +81,7 @@ const SignIn: FC = () => {
                         Увійти
                     </button>
 
-                    <div className="text-center text-sm text-[#6d8d6d] mt-4">
-                        <p>Не маєте акаунту?</p>
-                        <a href="#" className="text-[#3d5c3d] font-medium hover:underline">
-                            Зареєструватися
-                        </a>
-                    </div>
-
-                    <div className="relative mt-6">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-[#bdeac2]" />
-                        </div>
-                        <div className="relative flex justify-center text-sm">
-                            <span className="bg-[#e4fbe1] px-3 text-[#6d8d6d]">або</span>
-                        </div>
-                    </div>
-
-                    <button className="mt-4 w-full py-3 bg-[#d4e5d1] hover:bg-[#a9c6a6] rounded-xl text-[#3d5c3d] font-semibold transition-colors">
-                        Увійти через Google
-                    </button>
+                    {error && <p className="text-red-600 mt-2 text-center">{error}</p>}
                 </form>
             </div>
         </div>
