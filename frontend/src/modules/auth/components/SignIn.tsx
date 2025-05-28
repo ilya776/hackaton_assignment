@@ -17,7 +17,7 @@ const SignIn = () => {
 
         try {
             const data = await login(form);
-            localStorage.setItem("accessToken", data.access);
+            localStorage.setItem("accessToken", data.tokens.access);
             alert("Успішний вхід!");
             // Далі можна редірект або оновлення стану
         } catch (err: any) {
