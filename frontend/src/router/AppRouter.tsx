@@ -1,10 +1,11 @@
 import Layout from "@/layout/Layout";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { APP_ROUTES_NAMES } from "./AppRouterNames";
+import AuthPage from "@/pages/AuthPage.tsx";
 
 const AppRouter = [
   {
-    element: <>Auth</>,
+    element: <AuthPage/>,
     path: APP_ROUTES_NAMES.Auth,
   },
   {
