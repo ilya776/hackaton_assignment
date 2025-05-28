@@ -1,9 +1,41 @@
-import { useState } from "react";
+import { useState,type FormEvent } from "react";
 import type { FC } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { registerUser,type RegisterData } from "../services/signUpService.ts"; // поправ шлях
 
 const SignUp: FC = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState<RegisterData>({
+        name: "",
+        email: "",
+        password: "",
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setSuccessMessage(null);
+        setLoading(true);
+
+        try {
+            const data = await registerUser(formData);
+            setSuccessMessage("Реєстрація успішна! Ви можете увійти.");
+            setFormData({ name: "", email: "", password: "" });
+            localStorage.setItem("accessToken", data.tokens.access);
+            localStorage.setItem("refreshToken", data.tokens.refresh);
+        } catch (err: any) {
+            setError(err.message || "Сталася помилка");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#f6fff4] text-[#3d5c3d] py-4">
@@ -15,11 +47,30 @@ const SignUp: FC = () => {
                     </p>
                 </div>
 
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    <label className="block">
+            <span className="block text-sm font-medium text-[#6d8d6d] mb-1">
+              Ім'я користувача
+            </span>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Ваше ім'я користувача"
+                            className="w-full px-4 py-3 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
+                            required
+                            minLength={3}
+                        />
+                    </label>
+
                     <label className="block">
                         <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Email</span>
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="you@example.com"
                             className="w-full px-4 py-3 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
                             required
@@ -30,9 +81,13 @@ const SignUp: FC = () => {
                         <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Пароль</span>
                         <input
                             type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             placeholder="********"
                             className="w-full px-4 py-3 pr-12 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
                             required
+                            minLength={6}
                         />
                         <button
                             type="button"
@@ -40,19 +95,19 @@ const SignUp: FC = () => {
                             className="absolute right-3 top-[38px] text-[#6d8d6d] hover:text-[#3d5c3d] transition-colors"
                             aria-label={showPassword ? "Сховати пароль" : "Показати пароль"}
                         >
-                            {showPassword ? (
-                                <AiFillEyeInvisible size={20} />
-                            ) : (
-                                <AiFillEye size={20} />
-                            )}
+                            {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
                         </button>
                     </label>
 
+                    {error && <p className="text-red-600 text-center">{error}</p>}
+                    {successMessage && <p className="text-green-600 text-center">{successMessage}</p>}
+
                     <button
                         type="submit"
-                        className="w-full py-3 bg-[#a2e4a6] hover:bg-[#8fd793] rounded-xl text-[#3d5c3d] font-semibold transition-colors"
+                        disabled={loading}
+                        className="w-full py-3 bg-[#a2e4a6] hover:bg-[#8fd793] rounded-xl text-[#3d5c3d] font-semibold transition-colors disabled:opacity-50"
                     >
-                        Зареєструватися
+                        {loading ? "Реєстрація..." : "Зареєструватися"}
                     </button>
 
                     <div className="text-center text-sm text-[#6d8d6d] mt-4">
@@ -71,7 +126,10 @@ const SignUp: FC = () => {
                         </div>
                     </div>
 
-                    <button className="mt-4 w-full py-3 bg-[#d4e5d1] hover:bg-[#a9c6a6] rounded-xl text-[#3d5c3d] font-semibold transition-colors">
+                    <button
+                        type="button"
+                        className="mt-4 w-full py-3 bg-[#d4e5d1] hover:bg-[#a9c6a6] rounded-xl text-[#3d5c3d] font-semibold transition-colors"
+                    >
                         Зареєструватися через Google
                     </button>
                 </form>
