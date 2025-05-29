@@ -1,80 +1,106 @@
-# GitLab CI/CD Template
-
 stages:
+  - lint
   - test
+  - scan
   - build
   - deploy
 
 variables:
-  DOCKER_DRIVER: overlay2
+  ENV_NAME: "prod"
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: "tcp://docker:2375"
+  SSH_PRIVATE_KEY_PATH: "/tmp/deploy_key.pem"
+  PROJECT_DIR: "/home/ubuntu/hacathon"
 
-# Test stage
-test:
-  stage: test
-  image: python:3.11-slim
+.default_job: &default_job
+  image: docker:latest
   services:
-    - postgres:15-alpine
-  variables:
-    POSTGRES_DB: app_db_test
-    POSTGRES_USER: test_user
-    POSTGRES_PASSWORD: test_password
-    POSTGRES_HOST: postgres
-    POSTGRES_PORT: 5432
-    DEBUG: 'True'
-    SECRET_KEY: 'test-secret-key'
+    - docker:dind
+  before_script:
+    - apk add --no-cache openssh git
+    - mkdir -p ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - echo "$SSH_PRIVATE_KEY" > $SSH_PRIVATE_KEY_PATH
+    - chmod 600 $SSH_PRIVATE_KEY_PATH
+
+# =========================
+# Code Quality & Linting
+# =========================
+
+lint_backend:
+  <<: *default_job
+  stage: lint
+  image: python:3.11
+  before_script:
+    - pip install black isort flake8
   script:
     - cd backend
-    - pip install -r requirements.txt
-    - pip install pytest pytest-django coverage
-    - coverage run -m pytest
-    - coverage report
-    - coverage xml
-  artifacts:
-    paths:
-      - backend/coverage.xml
-    expire_in: 1 week
+    - black --check .
+    - isort --check-only .
+    - flake8 .
 
-# Build stage
-build:
-  stage: build
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_HOST: tcp://docker:2376
+lint_frontend:
+  <<: *default_job
+  stage: lint
+  image: node:20
   script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG ./backend
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG ./frontend
-    - docker build -t $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_REF_SLUG ./nginx
-    - docker build -t $CI_REGISTRY_IMAGE/mailhog:$CI_COMMIT_REF_SLUG ./mailhog
-    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/mailhog:$CI_COMMIT_REF_SLUG
-  only:
-    - main
-    - dev
+    - cd frontend
+    - npm ci
+    - npm run lint
 
-# Deploy stage
-deploy:
-  stage: deploy
-  image: alpine:latest
+# ===================
+# Run tests
+# ===================
+
+test_backend:
+  <<: *default_job
+  stage: test
+  image: python:3.11
   before_script:
-    - apk add --no-cache openssh-client
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
+    - pip install -r backend/requirements.txt
   script:
-    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && git pull"
-    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && docker-compose -f docker-compose.prod.yml pull"
-    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && docker-compose -f docker-compose.prod.yml up -d"
+    - cd backend
+    - python manage.py test
+
+# =====================
+# Security Scan with Trivy
+# =====================
+
+scan_docker:
+  <<: *default_job
+  stage: scan
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL backend
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL frontend
+
+# ================
+# Build
+# ================
+
+build:
+  <<: *default_job
+  stage: build
+  script:
+    - docker compose -f docker-compose.${ENV_NAME}.yml build
+
+# ==================
+# Deploy to VPS
+# ==================
+
+deploy_prod:
+  <<: *default_job
+  stage: deploy
   only:
     - main
-  environment:
-    name: production
-    url: https://yourdomain.com
+  environment: production
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY_PATH ubuntu@18.197.176.80 "
+      cd $PROJECT_DIR &&
+      git pull &&
+      docker compose -f docker-compose.prod.yml down &&
+      docker compose -f docker-compose.prod.yml up -d --build &&
+      docker image prune -f
+      "

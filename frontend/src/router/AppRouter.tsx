@@ -7,6 +7,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import { store } from "@/redux/store";
 import { APP_ROUTES_NAMES } from "./AppRouterNames";
 import { ProtectedRoutes } from "./ProtectedRoutes";
+import AllBooks from "@/pages/AllBooks.tsx";
 
 const AppRouter = [
   {
@@ -14,10 +15,10 @@ const AppRouter = [
     path: APP_ROUTES_NAMES.Auth,
   },
   {
-    element: <Layout />,
+    element: <ProtectedRoutes />,
     children: [
       {
-        element: <ProtectedRoutes />,
+        element: <Layout />,
         children: [
           {
             element: <ProfilePage />,
@@ -33,7 +34,11 @@ const AppRouter = [
             path: APP_ROUTES_NAMES.Root,
           },
           {
-            element: <BookPage />,
+            element: <AllBooks/>,
+            path: APP_ROUTES_NAMES.Library,
+          },
+          {
+            element: <BookPage/>,
             path: APP_ROUTES_NAMES.Book + ":bookId",
           },
         ],

@@ -3,4 +3,5 @@ export const APP_ROUTES_NAMES = {
   Profile: "/profile",
   Root: "/",
   Book: "/book/",
+  Library: "/library",
 } as const;
