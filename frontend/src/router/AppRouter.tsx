@@ -1,6 +1,7 @@
 import Layout from "@/layout/Layout";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { APP_ROUTES_NAMES } from "./AppRouterNames";
+import ProfilePage from "@/pages/ProfilePage";
 import AuthPage from "@/pages/AuthPage.tsx";
 
 const AppRouter = [
@@ -15,7 +16,7 @@ const AppRouter = [
         element: <ProtectedRoutes />,
         children: [
           {
-            element: <>Profile</>,
+            element: <ProfilePage/>,
             path: APP_ROUTES_NAMES.Profile,
           },
           {
