@@ -53,13 +53,13 @@ lint_frontend:
   <<: *default_job
   stage: lint
   image: node:20
+  before_script:
+    - apt-get update && apt-get install -y git curl bash
   script:
-    - cd frontend
     - npm ci
     - npm run lint
   allow_failure: false
   retry: 2
-
 # =========================
 # Backend tests execution
 # =========================
