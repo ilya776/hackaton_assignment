@@ -19,7 +19,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../docker/django/Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./backend:/app
     ports:
