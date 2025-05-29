@@ -5,11 +5,13 @@ type Props = {
   className?: string;
   text: string;
   type?: "submit" | "reset" | "button" | undefined;
+  disabled?: boolean;
 };
 
-const MainButton: FC<Props> = ({ onClick, className, text, type = undefined }) => {
+const MainButton: FC<Props> = ({ onClick, className, text, type = undefined, disabled = false }) => {
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={onClick}
       className={

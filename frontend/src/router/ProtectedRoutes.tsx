@@ -6,7 +6,7 @@ import {
 import { APP_ROUTES_NAMES } from './AppRouterNames';
 
 const ProtectedRoutes: FC = () => {
-  const auth = true; //check auth
+  const auth = localStorage.getItem('accessToken');
 
   return auth ? <Outlet /> : <Navigate to={APP_ROUTES_NAMES.Auth} />;
 };
