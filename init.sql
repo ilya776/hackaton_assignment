@@ -1,1 +1,1 @@
-CREATE DATABASE yarik;
+CREATE DATABASE library;

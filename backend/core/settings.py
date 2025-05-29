@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+load_dotenv()
 # Application definition
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 DATABASES = {
@@ -42,6 +42,8 @@ DATABASES = {
     }
 }
 
+print("POSTGRES_PASSWORD env:", os.getenv('POSTGRES_PASSWORD'))
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'corsheaders',
+    'books',
 ]
 
 MIDDLEWARE = [
