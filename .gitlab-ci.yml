@@ -17,7 +17,6 @@ variables:
   services:
     - docker:dind
   before_script:
-    # Install required packages: ssh, git, bash, curl
     - apk add --no-cache openssh git bash curl
     # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
