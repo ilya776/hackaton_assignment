@@ -12,8 +12,8 @@ const routes = [
     icon : <MdDashboard/>,
   },
   {
-    to: APP_ROUTES_NAMES.Profile,
-    name: "My Collections",
+    to: APP_ROUTES_NAMES.Library,
+    name: "Library",
     icon: <FaBookOpen/>,
   },
   {
