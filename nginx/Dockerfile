@@ -24,7 +24,7 @@ RUN mkdir -p /etc/nginx/certs && \
 USER appuser
 
 # Expose ports
-EXPOSE 80 443
+EXPOSE 80
 
 # Set healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \

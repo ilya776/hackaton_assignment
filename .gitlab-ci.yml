@@ -88,8 +88,9 @@ scan_docker:
     name: aquasec/trivy:latest
     entrypoint: [""]
   script:
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL backend || { echo "Backend image has critical vulnerabilities"; exit 1; }
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL frontend || { echo "Frontend image has critical vulnerabilities"; exit 1; }
+    - docker compose -f docker-compose.${ENV_NAME}.yml build
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL hacathon-backend || { echo "Backend image has critical vulnerabilities"; exit 1; }
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL hacathon-frontend || { echo "Frontend image has critical vulnerabilities"; exit 1; }
   allow_failure: false
   retry: 1
 
@@ -115,7 +116,7 @@ deploy_prod:
     - main
   environment:
     name: production
-    url: https://your-production-url.example.com
+    url: http://18.197.176.80
   script:
     - ssh -o StrictHostKeyChecking=yes -i $SSH_PRIVATE_KEY_PATH ubuntu@18.197.176.80 "
       cd $PROJECT_DIR &&
