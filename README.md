@@ -181,7 +181,3 @@ The `ci/` directory contains templates for CI/CD pipelines:
    ```
 
 4. Create a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
