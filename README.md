@@ -134,7 +134,29 @@ The `scripts/` directory contains utility scripts for common tasks:
 - `deploy.sh`: Deployment script
 - `backup_db.sh`: Database backup script
 
-## CI/CD Templates
+## CI/CD Setup
+
+### GitLab CI/CD
+
+This project includes a `.gitlab-ci.yml` file for automatic deployment to your server. To set it up:
+
+1. In your GitLab project, go to **Settings > CI/CD > Variables**
+
+2. Add the following variables:
+   - `SSH_PRIVATE_KEY`: The content of your SSH private key (from `lntu-student.pem`)
+   - `SSH_KNOWN_HOSTS`: The SSH fingerprint of your server (run `ssh-keyscan 18.197.176.80` to get it)
+
+3. Ensure your server has the project repository cloned at `/home/ubuntu/hacathon`
+
+4. Push to the `main` branch to trigger the deployment pipeline
+
+The deployment process will:
+- Connect to your server at 18.197.176.80
+- Pull the latest code
+- Rebuild and restart the Docker containers
+- Clean up unused Docker images
+
+### CI/CD Templates
 
 The `ci/` directory contains templates for CI/CD pipelines:
 
@@ -159,7 +181,4 @@ The `ci/` directory contains templates for CI/CD pipelines:
    ```
 
 4. Create a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+``
