@@ -1,10 +1,15 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None):
         if not email:
-            raise ValueError('Користувач повинен мати email')
+            raise ValueError("Користувач повинен мати email")
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
         user.set_password(password)
@@ -18,6 +23,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
@@ -26,8 +32,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["name"]
 
     def __str__(self):
         return self.email
