@@ -17,7 +17,7 @@ variables:
   services:
     - docker:dind
   before_script:
-    - apk add --no-cache openssh git bash curl
+    - apt-get update && apt-get install -y openssh-client git bash curl
     # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
