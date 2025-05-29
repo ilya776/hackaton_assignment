@@ -5,6 +5,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import AuthPage from "@/pages/AuthPage.tsx";
 import LibraryPage from "@/pages/LibraryPage";
 import BookPage from "@/pages/BookPage.tsx";
+import AllBooks from "@/pages/AllBooks.tsx";
 
 const AppRouter = [
   {
@@ -24,6 +25,10 @@ const AppRouter = [
           {
             element: <LibraryPage/>,
             path: APP_ROUTES_NAMES.Root,
+          },
+          {
+            element: <AllBooks/>,
+            path: APP_ROUTES_NAMES.Library,
           },
           {
             element: <BookPage/>,
