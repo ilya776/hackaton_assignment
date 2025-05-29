@@ -1,0 +1,80 @@
+# GitLab CI/CD Template
+
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+# Test stage
+test:
+  stage: test
+  image: python:3.11-slim
+  services:
+    - postgres:15-alpine
+  variables:
+    POSTGRES_DB: app_db_test
+    POSTGRES_USER: test_user
+    POSTGRES_PASSWORD: test_password
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
+    DEBUG: 'True'
+    SECRET_KEY: 'test-secret-key'
+  script:
+    - cd backend
+    - pip install -r requirements.txt
+    - pip install pytest pytest-django coverage
+    - coverage run -m pytest
+    - coverage report
+    - coverage xml
+  artifacts:
+    paths:
+      - backend/coverage.xml
+    expire_in: 1 week
+
+# Build stage
+build:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG ./backend
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG ./frontend
+    - docker build -t $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_REF_SLUG ./nginx
+    - docker build -t $CI_REGISTRY_IMAGE/mailhog:$CI_COMMIT_REF_SLUG ./mailhog
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE/nginx:$CI_COMMIT_REF_SLUG
+    - docker push $CI_REGISTRY_IMAGE/mailhog:$CI_COMMIT_REF_SLUG
+  only:
+    - main
+    - dev
+
+# Deploy stage
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && git pull"
+    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && docker-compose -f docker-compose.prod.yml pull"
+    - ssh $SERVER_USER@$SERVER_HOST "cd $PROJECT_PATH && docker-compose -f docker-compose.prod.yml up -d"
+  only:
+    - main
+  environment:
+    name: production
+    url: https://yourdomain.com
