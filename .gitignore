@@ -12,3 +12,4 @@ dist/
 *.log
 postgres_data/
 *.pem
+.env.prod
