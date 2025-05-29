@@ -28,17 +28,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-load_dotenv()
+load_dotenv(os.path.join(BASE_DIR, '..', 'envs', '.env.dev'))
 # Application definition
-load_dotenv(os.path.join(BASE_DIR, '.env'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT'),
+        'NAME': os.getenv('POSTGRES_DB', 'app_db'),
+        'USER': os.getenv('POSTGRES_USER', 'user_db'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'root'),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 
