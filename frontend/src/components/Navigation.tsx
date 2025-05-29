@@ -8,17 +8,17 @@ import { FaBookmark } from "react-icons/fa";
 const routes = [
   {
     to: APP_ROUTES_NAMES.Root,
-    name: "Dashboard",
+    name: "Книги",
     icon : <MdDashboard/>,
   },
   {
     to: APP_ROUTES_NAMES.Profile,
-    name: "My Collections",
+    name: "Мої колекції",
     icon: <FaBookOpen/>,
   },
   {
     to:'',
-    name: "Favourites",
+    name: "Улюблене",
     icon: <FaBookmark/>,
   },
 ];

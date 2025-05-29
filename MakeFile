@@ -2,7 +2,7 @@ up:
 	docker-compose up --build
 
 down:
-	docker-compose down
+	docker-compose down -v
 
 migrate:
 	docker-compose exec backend python manage.py migrate

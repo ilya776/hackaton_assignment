@@ -1,6 +1,12 @@
+import MainBanner from "@/components/MainBaner";
+import BooksList from "@/components/BooksList.tsx";
+
 const LibraryPage = () => {
   return (
-    <div>LibraryPage</div>
+      <>
+        <MainBanner />
+        <BooksList/>
+      </>
   )
 }
 
