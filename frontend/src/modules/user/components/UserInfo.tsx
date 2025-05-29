@@ -1,0 +1,29 @@
+import { UserIcon, EnvelopeIcon, CalendarIcon, StarIcon } from "@heroicons/react/24/solid";
+
+const UserInfo = () => {
+  return (
+    <div className="bg-gr-light p-6 rounded-2xl shadow-sm">
+      <h3 className="text-lg font-semibold mb-4 text-gr-darkest">Твої дані</h3>
+      <ul className="text-sm space-y-4">
+        <li className="flex items-center gap-3">
+          <UserIcon className="w-5 h-5 text-gr-dark" />
+          <span><span className="font-semibold">Ім'я:</span> Tralala</span>
+        </li>
+        <li className="flex items-center gap-3">
+          <EnvelopeIcon className="w-5 h-5 text-gr-dark" />
+          <span><span className="font-semibold">Email:</span> lalala@example.com</span>
+        </li>
+        <li className="flex items-center gap-3">
+          <CalendarIcon className="w-5 h-5 text-gr-dark" />
+          <span><span className="font-semibold">Приєднався:</span> 14 березня 2025</span>
+        </li>
+        <li className="flex items-center gap-3">
+          <StarIcon className="w-5 h-5 text-gr-dark" />
+          <span><span className="font-semibold">Улюблений жанр:</span> Фантастика</span>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default UserInfo;
