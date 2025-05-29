@@ -13,3 +13,4 @@ dist/
 postgres_data/
 *.pem
 .env.prod
+envs/

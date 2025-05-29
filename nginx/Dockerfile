@@ -6,6 +6,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY .htpasswd /etc/nginx/.htpasswd
+COPY conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 # Set proper permissions
 RUN chown -R appuser:appgroup /etc/nginx/conf.d && \

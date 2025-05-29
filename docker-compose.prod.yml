@@ -5,7 +5,10 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
-      - .env.prod
+      - envs/.env.prod
+    environment:
+      - DJANGO_APPLY_MIGRATIONS=true
+      - DJANGO_COLLECT_STATIC=true
     volumes:
       - backend_static:/app/static
       - backend_media:/app/media
@@ -25,6 +28,8 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
+    entrypoint: ["/app/entrypoint.prod.sh"]
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
 
   frontend:
     build:
@@ -101,7 +106,7 @@ services:
     image: postgres:15-alpine
     restart: unless-stopped
     env_file:
-      - .env.prod
+      - envs/.env.prod
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
