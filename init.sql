@@ -1,1 +1,1 @@
-CREATE DATABASE library;
+CREATE DATABASE app_db;
