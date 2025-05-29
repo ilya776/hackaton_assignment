@@ -1,7 +1,7 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
-
+from django.utils import timezone
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None):
@@ -26,7 +26,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    date_joined = models.DateTimeField(default=timezone.now)
     objects = UserManager()
 
     USERNAME_FIELD = "email"
