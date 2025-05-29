@@ -53,9 +53,9 @@ lint_frontend:
   <<: *default_job
   stage: lint
   image: node:20
-  before_script:
-    - apt-get update && apt-get install -y git curl bash
   script:
+    - apt-get update && apt-get install -y git curl bash
+    - cd frontend
     - npm ci
     - npm run lint
   allow_failure: false
