@@ -1,1 +1,1 @@
-CREATE DATABASE yarik;
+CREATE DATABASE app_db;
