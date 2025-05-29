@@ -8,25 +8,25 @@ import BookPage from "@/pages/BookPage.tsx";
 
 const AppRouter = [
   {
-    element: <AuthPage/>,
+    element: <AuthPage />,
     path: APP_ROUTES_NAMES.Auth,
   },
   {
-    element: <Layout />,
+    element: <ProtectedRoutes />,
     children: [
       {
-        element: <ProtectedRoutes />,
+        element: <Layout />,
         children: [
           {
-            element: <ProfilePage/>,
+            element: <ProfilePage />,
             path: APP_ROUTES_NAMES.Profile,
           },
           {
-            element: <LibraryPage/>,
+            element: <LibraryPage />,
             path: APP_ROUTES_NAMES.Root,
           },
           {
-            element: <BookPage/>,
+            element: <BookPage />,
             path: APP_ROUTES_NAMES.Book + ":bookId",
           },
         ],
