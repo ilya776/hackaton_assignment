@@ -1,5 +1,5 @@
 import SideBar from "@/layout/SideBar.tsx";
-import MainHeader from "@/components/MainHeader.tsx";
+import MainHeader from "@/layout/Header";
 import { Outlet } from "react-router";
 
 const Layout = () => {
@@ -13,7 +13,7 @@ const Layout = () => {
         <SideBar />
       </div>
 
-      <div className="ml-[350px] mt-[60px] bg-[#bed7b8]">
+      <div className="ml-[350px] mt-[60px] bg-[#bed7b8] pb-5">
         <Outlet />
       </div>
     </div>
