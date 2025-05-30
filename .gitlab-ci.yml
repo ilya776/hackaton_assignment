@@ -14,19 +14,12 @@ variables:
     - docker:dind
   before_script:
     - apk add --no-cache openssh git bash curl
-    # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - cat "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    # Write SSH private key to file and set correct permissions
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    # Configure git/ssh to use the private key and known_hosts strictly
     - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-
-# =========================
-# Build Docker images for environment
-# =========================
 
 build:
   <<: *default_job
@@ -34,10 +27,6 @@ build:
   script:
     - docker compose -f docker-compose.${ENV_NAME}.yml build
   allow_failure: false
-
-# =========================
-# Deploy application to production server
-# =========================
 
 deploy_prod:
   <<: *default_job
@@ -48,13 +37,14 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh -o StrictHostKeyChecking=yes -i ~/.ssh/id_rsa ubuntu@18.197.176.80 "
-      cd $PROJECT_DIR &&
-      git reset --hard &&
-      git pull origin main &&
-      docker compose -f docker-compose.prod.yml down &&
-      docker compose -f docker-compose.prod.yml up -d --build &&
+    - ssh -o StrictHostKeyChecking=yes -i ~/.ssh/id_rsa ubuntu@18.197.176.80 '
+      set -e
+      cd "$PROJECT_DIR"
+      git reset --hard
+      git pull origin main
+      docker compose -f docker-compose.prod.yml down
+      docker compose -f docker-compose.prod.yml up -d --build
       docker image prune -f
-      "
+      '
   allow_failure: false
   retry: 2
