@@ -15,10 +15,13 @@ variables:
   before_script:
     - apk add --no-cache openssh git bash curl
     - mkdir -p ~/.ssh
-    - cat "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
+    - |
+      echo -e "Host lntu-server\n\tHostName 18.197.176.80\n\tUser ubuntu\n\tIdentityFile ~/.ssh/id_rsa\n\tStrictHostKeyChecking yes" > ~/.ssh/config
+    - chmod 600 ~/.ssh/config
     - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
 build:
@@ -37,7 +40,7 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh -o StrictHostKeyChecking=yes -i ~/.ssh/id_rsa ubuntu@18.197.176.80 '
+    - ssh lntu-server '
       set -e
       cd "$PROJECT_DIR"
       git reset --hard
