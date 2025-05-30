@@ -1,10 +1,17 @@
 import { useGetUserQuery } from "../API/userApi";
 
 const UserPreview = () => {
+  // const { data: user } = useGetUserQuery();
+  // if (!user) return null;
 
-  const { data: user } = useGetUserQuery();
-  if (!user) return null;
-  
+  const user = {
+    id: "1",
+    name: "John Doe",
+    email: "",
+    favoriteGenre: "Science Fiction",
+    createdAt: "2023-01-01T00:00:00Z",
+  };
+
   return (
     <div className="flex items-center gap-6">
       <img

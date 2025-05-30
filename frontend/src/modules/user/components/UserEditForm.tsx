@@ -8,7 +8,14 @@ type Props = {
 };
 
 const UserEditForm: FC<Props> = ({ setIsOpen }) => {
-  const { data: user } = useGetUserQuery();
+  // const { data: user } = useGetUserQuery();
+  const user = {
+    id: "1",
+    name: "John Doe",
+    email: "",
+    favoriteGenre: "Science Fiction",
+    createdAt: "2023-01-01T00:00:00Z",
+  }
   const initialData = {
     name: user?.name || "",
     email: user?.email || "",

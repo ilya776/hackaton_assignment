@@ -2,8 +2,16 @@ import { UserIcon, EnvelopeIcon, CalendarIcon, StarIcon } from "@heroicons/react
 import { useGetUserQuery } from "../API/userApi";
 
 const UserInfo = () => {
-  const { data: user } = useGetUserQuery();
-  if (!user) return null;
+  // const { data: user } = useGetUserQuery();
+  // if (!user) return null;
+
+    const user = {
+    id: "1",
+    name: "John Doe",
+    email: "",
+    favoriteGenre: "Science Fiction",
+    createdAt: "2023-01-01T00:00:00Z",
+  }
 
   return (
     <div className="bg-gr-light p-6 rounded-2xl shadow-sm">
