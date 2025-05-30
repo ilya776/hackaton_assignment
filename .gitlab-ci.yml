@@ -30,13 +30,19 @@ test_backend:
   <<: *default_job
   stage: test
   image: python:3.11
+  services:
+    - postgres:15
+  variables:
+    ENV_NAME: "prod"
+    POSTGRES_HOST: db
   before_script:
     - pip install -r backend/requirements.txt
-  script:
     - cd backend
+  script:
     - python manage.py test --verbosity=2
   allow_failure: false
   retry: 1
+
 
 # =========================
 # Build Docker images for environment

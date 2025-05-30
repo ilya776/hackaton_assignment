@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 load_dotenv()
 # Application definition
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(dotenv_path=f'envs/.env.{os.getenv("ENV_NAME", "prod")}')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
