@@ -32,13 +32,12 @@ deploy_prod:
   only:
     - main
   script:
-    - ssh lntu-server '
-      set -e
-      cd "$PROJECT_DIR"
-      git reset --hard
-      git pull origin main
-      docker compose -f docker-compose.prod.yml down
-      docker compose -f docker-compose.prod.yml up -d --build
-      docker image prune -f
-      '
+    - ssh lntu-server "set -e && 
+        cd $PROJECT_DIR && 
+        git reset --hard && 
+        git pull origin main && 
+        docker compose -f docker-compose.prod.yml down && 
+        docker compose -f docker-compose.prod.yml up -d --build && 
+        docker image prune -f"
+
   retry: 2
