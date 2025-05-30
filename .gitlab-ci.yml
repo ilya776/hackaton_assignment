@@ -28,7 +28,6 @@ build:
   stage: build
   script:
     - docker compose -f docker-compose.${ENV_NAME}.yml build
-  allow_failure: false
 
 deploy_prod:
   <<: *default_job
@@ -39,7 +38,7 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh ubuntu@18.197.176.80 '
+    - ssh lntu-server '
       set -e
       cd "$PROJECT_DIR"
       git reset --hard
@@ -48,7 +47,4 @@ deploy_prod:
       docker compose -f docker-compose.prod.yml up -d --build
       docker image prune -f
       '
-  allow_failure: false
   retry: 2
-
-
