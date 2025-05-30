@@ -25,23 +25,28 @@ variables:
 # =========================
 # Backend tests execution
 # =========================
-
 test_backend:
   <<: *default_job
   stage: test
   image: python:3.11
   services:
-    - postgres:15
+    - name: postgres:15
+      alias: db
   variables:
     ENV_NAME: "prod"
     POSTGRES_HOST: db
+    POSTGRES_DB: my_test_db
+    POSTGRES_USER: my_test_user
+    POSTGRES_PASSWORD: my_test_password
   before_script:
     - pip install -r backend/requirements.txt
     - cd backend
+    - printenv | grep POSTGRES
   script:
     - python manage.py test --verbosity=2
   allow_failure: false
   retry: 1
+
 
 
 # =========================
