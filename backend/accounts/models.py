@@ -25,7 +25,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     favorite_genre = models.CharField(max_length=100, blank=True, null=True)  # улюблений жанр
-    date_joined = models.DateTimeField(default=now)  # дата реєстрації
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
