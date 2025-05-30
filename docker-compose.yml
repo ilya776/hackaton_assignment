@@ -37,8 +37,7 @@ services:
       - backend
       - frontend
     expose:
-      - "8000"  # do NOT publish to host in production
-
+      - "8000"
   frontend:
     build:
       context: ./frontend

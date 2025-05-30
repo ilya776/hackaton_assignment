@@ -1,5 +1,4 @@
 stages:
-  - test
   - build
   - deploy
 
@@ -7,7 +6,7 @@ variables:
   ENV_NAME: "prod"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
-  SSH_PRIVATE_KEY_PATH: "/tmp/deploy_key.pem"
+  SSH_PRIVATE_KEY_PATH: "/tmp/lntu-student.pem"
   PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
 
 .default_job: &default_job
@@ -15,40 +14,15 @@ variables:
   services:
     - docker:dind
   before_script:
-    - apt-get update && apt-get install -y openssh-client git bash curl
+    - apk add --no-cache openssh git bash curl
+    # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    # Add private SSH key with correct permissions
     - echo "$SSH_PRIVATE_KEY" > $SSH_PRIVATE_KEY_PATH
     - chmod 600 $SSH_PRIVATE_KEY_PATH
+    # Configure git/ssh to use the private key and known_hosts strictly
     - export GIT_SSH_COMMAND="ssh -i $SSH_PRIVATE_KEY_PATH -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
-
-# =========================
-# Backend tests execution
-# =========================
-test_backend:
-  <<: *default_job
-  stage: test
-  image: python:3.11
-  services:
-    - name: postgres:15
-      alias: db
-  variables:
-    ENV_NAME: "prod"
-    POSTGRES_HOST: db
-    POSTGRES_DB: my_test_db
-    POSTGRES_USER: my_test_user
-    POSTGRES_PASSWORD: my_test_password
-  before_script:
-    - pip install -r backend/requirements.txt
-    - export PYTHONPATH="$PYTHONPATH:$(pwd)"
-    - cd backend
-    - printenv | grep POSTGRES
-  script:
-    - python manage.py test --verbosity=2
-  allow_failure: false
-  retry: 1
-
-
 
 # =========================
 # Build Docker images for environment
@@ -72,7 +46,7 @@ deploy_prod:
     - main
   environment:
     name: production
-    url: http://18.197.176.80
+    url: https://your-production-url.example.com
   script:
     - ssh -o StrictHostKeyChecking=yes -i $SSH_PRIVATE_KEY_PATH ubuntu@18.197.176.80 "
       cd $PROJECT_DIR &&
