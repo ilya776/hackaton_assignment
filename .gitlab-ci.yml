@@ -6,7 +6,6 @@ variables:
   ENV_NAME: "prod"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
-  SSH_PRIVATE_KEY_PATH: "/tmp/lntu-student.pem"
   PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
 
 .default_job: &default_job
@@ -19,8 +18,8 @@ variables:
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     # Add private SSH key with correct permissions
-    - echo "$SSH_PRIVATE_KEY" > $SSH_PRIVATE_KEY_PATH
-    - chmod 600 $SSH_PRIVATE_KEY_PATH
+    - echo "$SSH_PRIVATE_KEY" > "$SSH_PRIVATE_KEY_PATH"
+    - chmod 600 "$SSH_PRIVATE_KEY_PATH"
     # Configure git/ssh to use the private key and known_hosts strictly
     - export GIT_SSH_COMMAND="ssh -i $SSH_PRIVATE_KEY_PATH -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
@@ -48,7 +47,7 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh -o StrictHostKeyChecking=yes -i $SSH_PRIVATE_KEY_PATH ubuntu@18.197.176.80 "
+    - ssh -o StrictHostKeyChecking=yes -i "$SSH_PRIVATE_KEY_PATH" ubuntu@18.197.176.80 "
       cd $PROJECT_DIR &&
       git reset --hard &&
       git pull origin main &&

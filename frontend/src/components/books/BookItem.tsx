@@ -6,9 +6,10 @@ type BookItemType = {
     id: number;
     title: string;
     image: string;
+    viewMode?: 'grid' | 'list';
 };
 
-const BookItem: FC<BookItemType> = ({ id, title, image  }) => {
+const BookItem: FC<BookItemType> = ({ id, title, image}) => {
     return (
         <Link to={`${APP_ROUTES_NAMES.Book}/${id}`} className="block hover:opacity-90 transition-opacity">
             <div className="cursor-pointer">
