@@ -1,25 +1,15 @@
-#!/bin/sh
-
-# Wait for database to be ready
-echo "Waiting for database..."
-sleep 5
+#!/bin/bash
+set -e
 
 # Apply database migrations
-echo "Applying migrations..."
+echo "Applying database migrations..."
+python manage.py makemigrations accounts
 python manage.py migrate
 
-# Create superuser if needed
-if [ "$DJANGO_SUPERUSER_EMAIL" ] && [ "$DJANGO_SUPERUSER_PASSWORD" ]; then
-    echo "Creating superuser..."
-    python manage.py createsuperuser --noinput --email $DJANGO_SUPERUSER_EMAIL
-fi
+# Run the book parser
+echo "Parsing books from website..."
+python manage.py parse_books
 
-# Collect static files if needed
-if [ "$DJANGO_COLLECT_STATIC" = "true" ]; then
-    echo "Collecting static files..."
-    python manage.py collectstatic --noinput
-fi
-
-# Start server
+# Start the main process
 echo "Starting server..."
 exec "$@"

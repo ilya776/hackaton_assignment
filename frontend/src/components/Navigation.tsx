@@ -31,7 +31,7 @@ const Navigation:FC = () => {
           <Link
             key={item.name}
             to={item.to}
-            className="cursor-pointer space-x-3 bg-[#3d5c3d] text-[#ddf5d7] w-[250px] rounded-[15px] flex items-center  h-[50px] text-2xl pl-4 whitespace-nowrap overflow-hidden text-ellipsis"
+            className="cursor-pointer space-x-3 bg-gr-darkest text-[#ddf5d7] w-[250px] rounded-[15px] flex items-center  h-[50px] text-2xl pl-4 whitespace-nowrap overflow-hidden text-ellipsis hover:scale-105 transition-all duration-200"
           >
             {item.icon} <p>{item.name}</p>
           </Link>
