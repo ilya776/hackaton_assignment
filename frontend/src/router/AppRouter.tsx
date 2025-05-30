@@ -1,13 +1,11 @@
 import Layout from "@/layout/Layout";
-import { userApi } from "@/modules/user/API/userApi";
-import AuthPage from "@/pages/AuthPage.tsx";
-import BookPage from "@/pages/BookPage.tsx";
-import LibraryPage from "@/pages/LibraryPage";
-import ProfilePage from "@/pages/ProfilePage";
-import { store } from "@/redux/store";
-import { APP_ROUTES_NAMES } from "./AppRouterNames";
 import { ProtectedRoutes } from "./ProtectedRoutes";
-import AllBooks from "@/pages/AllBooks.tsx";
+import { APP_ROUTES_NAMES } from "./AppRouterNames";
+import ProfilePage from "@/pages/ProfilePage";
+import AuthPage from "@/pages/AuthPage.tsx";
+import LibraryPage from "@/pages/LibraryPage";
+import AboutBooks from "@/pages/AboutBooks.tsx";
+import BookPage from "@/pages/BookPage.tsx";
 
 const AppRouter = [
   {
@@ -23,23 +21,18 @@ const AppRouter = [
           {
             element: <ProfilePage />,
             path: APP_ROUTES_NAMES.Profile,
-            loader: async () => {
-              const result = store.dispatch(userApi.endpoints.getUser.initiate());
-              await result;
-              result.unsubscribe();
-            },
           },
           {
             element: <LibraryPage />,
             path: APP_ROUTES_NAMES.Root,
           },
           {
-            element: <AllBooks/>,
+            element: <BookPage/>,
             path: APP_ROUTES_NAMES.Library,
           },
           {
-            element: <BookPage/>,
-            path: APP_ROUTES_NAMES.Book + ":bookId",
+            element: <AboutBooks/>,
+            path: APP_ROUTES_NAMES.Library + ":bookId",
           },
         ],
       },

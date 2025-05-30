@@ -37,6 +37,10 @@ print('All migrations have been applied!')
 "
 fi
 
+# Run book parser before starting the server
+echo "Parsing books from website..."
+python manage.py parse_books
+
 # Start the main process
 echo "Starting server..."
 exec "$@"

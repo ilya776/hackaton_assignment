@@ -12,7 +12,6 @@ RATING_MAP = {
     'Five': 5,
 }
 
-
 class Command(BaseCommand):
     help = 'Parse books from https://books.toscrape.com/ and save/update to DB'
 
@@ -20,14 +19,19 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         page_url = self.BASE_URL + 'catalogue/page-1.html'
+        total_parsed = 0
+        max_books = 150  # обмеження
 
-        while page_url:
+        while page_url and total_parsed < max_books:
             self.stdout.write(f'Parsing page: {page_url}')
             resp = requests.get(page_url)
             soup = BeautifulSoup(resp.text, 'html.parser')
 
             books = soup.select('article.product_pod')
             for book in books:
+                if total_parsed >= max_books:
+                    break
+
                 # Силка на деталі книги
                 rel_link = book.select_one('h3 a')['href']
                 book_url = self.BASE_URL + 'catalogue/' + rel_link.replace('../../../', '')
@@ -48,9 +52,9 @@ class Command(BaseCommand):
                         self.stdout.write(
                             self.style.ERROR(f'Invalid price for book "{title}": {price_tag.text.strip()}'))
                         price = Decimal('0.00')
-                    else:
-                        self.stdout.write(self.style.WARNING(f'No price found for "{title}"'))
-                        price = Decimal('0.00')
+                else:
+                    self.stdout.write(self.style.WARNING(f'No price found for "{title}"'))
+                    price = Decimal('0.00')
 
                 description_tag = book_soup.select_one('#product_description')
                 if description_tag:
@@ -86,7 +90,12 @@ class Command(BaseCommand):
                 else:
                     self.stdout.write(f'Updated: {title}')
 
+                total_parsed += 1  # збільшуємо лічильник
+
             # Пагінація
+            if total_parsed >= max_books:
+                break
+
             next_button = soup.select_one('li.next a')
             if next_button:
                 next_page = next_button['href']

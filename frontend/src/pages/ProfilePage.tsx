@@ -1,5 +1,5 @@
 import MainButton from "@/components/UI/MainButton";
-import { useGetUserQuery } from "@/modules/user/API/userApi";
+// import { useGetUserQuery } from "@/modules/user/API/userApi";
 import UserDashboard from "@/modules/user/components/UserDashboard";
 import UserStatistic from "@/modules/user/components/UserStatistic";
 import type { FC } from "react";

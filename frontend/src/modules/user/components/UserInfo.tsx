@@ -1,5 +1,5 @@
 import { UserIcon, EnvelopeIcon, CalendarIcon, StarIcon } from "@heroicons/react/24/solid";
-import { useGetUserQuery } from "../API/userApi";
+// import { useGetUserQuery } from "../API/userApi";
 
 const UserInfo = () => {
   // const { data: user } = useGetUserQuery();

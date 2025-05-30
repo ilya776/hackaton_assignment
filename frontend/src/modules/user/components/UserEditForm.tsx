@@ -1,7 +1,7 @@
 import MainButton from "@/components/UI/MainButton";
 import React, { useState, type FC } from "react";
 import { validateEmail } from "../utils/validateEmail";
-import { useGetUserQuery, useSetUserDataMutation } from "../API/userApi";
+import { useSetUserDataMutation } from "../API/userApi";
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;

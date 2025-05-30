@@ -1,4 +1,4 @@
-import { useGetUserQuery } from "../API/userApi";
+// import { useGetUserQuery } from "../API/userApi";
 
 const UserPreview = () => {
   // const { data: user } = useGetUserQuery();
