@@ -52,9 +52,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'accounts',
+    'backend.accounts',
     'corsheaders',
-    'books',
+    'backend.books',
 ]
 
 MIDDLEWARE = [
@@ -119,7 +119,7 @@ CORS_ALLOWED_ORIGINS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'backend.accounts.User'
 CORS_ALLOW_ALL_ORIGINS = True
 
 LANGUAGE_CODE = 'en-us'
