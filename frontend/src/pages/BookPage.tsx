@@ -1,16 +1,16 @@
-import {useMemo, useState} from "react";
-import {useGetBooksQuery} from "@/modules/books/services/booksApi.ts";
+import { useState, useMemo } from 'react';
 import BookItem from "@/components/books/BookItem.tsx";
+import { useGetBooksQuery } from "@/modules/books/services/booksApi.ts";
 
 interface Book {
   id: number;
   title: string;
-  genre: string;
+  genre: string[];
   year: number;
-  imageUrl: string;
+  image: string;
 }
 
-const BookPage = () => {
+const AllBooks = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
@@ -26,13 +26,12 @@ const BookPage = () => {
     isLoading: boolean;
   };
 
-  const genres = ["all", "Sequential Art", "Детектив", "Романтика", "Пригоди"];
   const years = ["all", "2023", "2022", "2021", "2020"];
   console.log(books);
   const filteredBooks = useMemo(() => {
     return books.filter(book => {
       const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesGenre = selectedGenre === 'all' || book.genre === selectedGenre;
+      const matchesGenre = selectedGenre === 'all' || book.genre.includes(selectedGenre);
       const matchesYear = selectedYear === 'all' || book.year.toString() === selectedYear;
       return matchesSearch && matchesGenre && matchesYear;
     });
@@ -45,6 +44,11 @@ const BookPage = () => {
   const buttonBase = "p-2 rounded";
   const active = "bg-blue-500 text-white";
   const inactive = "bg-gray-200";
+  const genres = useMemo(() => {
+    const allGenres = books.flatMap(book => book.genre);
+    const uniqueGenres = Array.from(new Set(allGenres));
+    return ['all', ...uniqueGenres];
+  }, [books]);
 
   return (
       <div className="container mx-auto px-4 py-8">
@@ -106,7 +110,7 @@ const BookPage = () => {
         }>
           {filteredBooks.map(book => (
               <div key={book.id} className={viewMode === 'list' ? 'w-full' : ''}>
-                <BookItem title={book.title} image={book.image} viewMode={viewMode} />
+                <BookItem id={book.id} title={book.title} image={book.image} viewMode={viewMode} />
               </div>
           ))}
         </div>
@@ -114,4 +118,4 @@ const BookPage = () => {
   );
 };
 
-export default BookPage
+export default AllBooks;

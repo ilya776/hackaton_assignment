@@ -5,9 +5,9 @@ import { useGetBooksQuery } from "@/modules/books/services/booksApi.ts";
 interface Book {
     id: number;
     title: string;
-    genre: string;
+    genre: string[];
     year: number;
-    imageUrl: string;
+    image: string;
 }
 
 const AllBooks = () => {
@@ -26,13 +26,12 @@ const AllBooks = () => {
         isLoading: boolean;
     };
 
-    const genres = ["all", "Sequential Art", "Детектив", "Романтика", "Пригоди"];
-    const years = ["all", "2023", "2022", "2021", "2020"];
+     const years = ["all", "2023", "2022", "2021", "2020"];
     console.log(books);
     const filteredBooks = useMemo(() => {
         return books.filter(book => {
             const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesGenre = selectedGenre === 'all' || book.genre === selectedGenre;
+            const matchesGenre = selectedGenre === 'all' || book.genre.includes(selectedGenre);
             const matchesYear = selectedYear === 'all' || book.year.toString() === selectedYear;
             return matchesSearch && matchesGenre && matchesYear;
         });
@@ -45,6 +44,11 @@ const AllBooks = () => {
     const buttonBase = "p-2 rounded";
     const active = "bg-blue-500 text-white";
     const inactive = "bg-gray-200";
+    const genres = useMemo(() => {
+        const allGenres = books.flatMap(book => book.genre);
+        const uniqueGenres = Array.from(new Set(allGenres));
+        return ['all', ...uniqueGenres];
+    }, [books]);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -104,9 +108,9 @@ const AllBooks = () => {
                     ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'
                     : 'flex flex-col gap-4'
             }>
-                {books.map(book => (
+                {filteredBooks.map(book => (
                     <div key={book.id} className={viewMode === 'list' ? 'w-full' : ''}>
-                        <BookItem title={book.title} image={book.image} viewMode={viewMode} />
+                        <BookItem id={book.id} title={book.title} image={book.image}   />
                     </div>
                 ))}
             </div>
