@@ -30,7 +30,7 @@ const AppRouter = [
             path: APP_ROUTES_NAMES.Library,
           },
           {
-            element: <BookPage/>,
+            element: <>BookPage</>,
             path: APP_ROUTES_NAMES.Book + "/:bookId",
           },
         ],
