@@ -25,3 +25,9 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Невірний email або пароль")
         data["user"] = user
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = User
+            fields = ['name', 'email', 'favorite_genre', 'date_joined']
+            read_only_fields = ['email', 'date_joined']

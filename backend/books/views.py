@@ -22,14 +22,11 @@ class BookExcelExportView(APIView):
         books = Book.objects.all().values('title', 'price', 'rating', 'genre')
         df = pd.DataFrame(list(books))
 
-        # Create a buffer to save the Excel file
         buffer = io.BytesIO()
 
-        # Write the DataFrame to an Excel file
         with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='Books', index=False)
 
-        # Set up the response
         buffer.seek(0)
         response = HttpResponse(
             buffer.getvalue(),
