@@ -26,7 +26,7 @@ const AllBooks = () => {
         isLoading: boolean;
     };
 
-    const genres = ["all", "Фантастика", "Детектив", "Романтика", "Пригоди"];
+    const genres = ["all", "Sequential Art", "Детектив", "Романтика", "Пригоди"];
     const years = ["all", "2023", "2022", "2021", "2020"];
     console.log(books);
     const filteredBooks = useMemo(() => {

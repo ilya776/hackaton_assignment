@@ -26,7 +26,7 @@ const BookPage = () => {
     isLoading: boolean;
   };
 
-  const genres = ["all", "Фантастика", "Детектив", "Романтика", "Пригоди"];
+  const genres = ["all", "Sequential Art", "Детектив", "Романтика", "Пригоди"];
   const years = ["all", "2023", "2022", "2021", "2020"];
   console.log(books);
   const filteredBooks = useMemo(() => {
@@ -104,7 +104,7 @@ const BookPage = () => {
               ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'
               : 'flex flex-col gap-4'
         }>
-          {books.map(book => (
+          {filteredBooks.map(book => (
               <div key={book.id} className={viewMode === 'list' ? 'w-full' : ''}>
                 <BookItem title={book.title} image={book.image} viewMode={viewMode} />
               </div>
