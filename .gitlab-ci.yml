@@ -40,6 +40,7 @@ test_backend:
     POSTGRES_PASSWORD: my_test_password
   before_script:
     - pip install -r backend/requirements.txt
+    - export PYTHONPATH="$PYTHONPATH:$(pwd)"
     - cd backend
     - printenv | grep POSTGRES
   script:
