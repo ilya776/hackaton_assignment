@@ -4,7 +4,6 @@ import { APP_ROUTES_NAMES } from "./AppRouterNames";
 import ProfilePage from "@/pages/ProfilePage";
 import AuthPage from "@/pages/AuthPage.tsx";
 import LibraryPage from "@/pages/LibraryPage";
-import AboutBooks from "@/pages/AboutBooks.tsx";
 import BookPage from "@/pages/BookPage.tsx";
 
 const AppRouter = [
@@ -28,11 +27,7 @@ const AppRouter = [
           },
           {
             element: <BookPage/>,
-            path: APP_ROUTES_NAMES.Library,
-          },
-          {
-            element: <AboutBooks/>,
-            path: APP_ROUTES_NAMES.Library + ":bookId",
+            path: APP_ROUTES_NAMES.Book + "/:bookId",
           },
         ],
       },
