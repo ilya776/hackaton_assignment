@@ -20,7 +20,7 @@ variables:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - |
-      echo -e "Host lntu-server\n\tHostName 18.197.176.80\n\tUser ubuntu\n\tIdentityFile ~/.ssh/id_rsa\n\tStrictHostKeyChecking yes\n\tUserKnownHostsFile ~/.ssh/known_hosts" > ~/.ssh/config
+      echo -e "Host lntu-server\n\tHostName 18.197.176.80\n\tUser ubuntu\n\tIdentityFile ~/.ssh/id_rsa\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile ~/.ssh/known_hosts" > ~/.ssh/config
     - chmod 600 ~/.ssh/config
 
 build:
