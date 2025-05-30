@@ -39,7 +39,7 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh lntu-server '
+    - ssh ubuntu@18.197.176.80 '
       set -e
       cd "$PROJECT_DIR"
       git reset --hard
@@ -50,3 +50,5 @@ deploy_prod:
       '
   allow_failure: false
   retry: 2
+
+
