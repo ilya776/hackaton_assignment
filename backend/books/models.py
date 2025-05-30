@@ -9,7 +9,6 @@ class Book(models.Model):
     description = models.TextField()
     rating = models.PositiveSmallIntegerField()
     genre = models.CharField(max_length=100, default="Unknown")
-    date_joined = models.DateTimeField(default=now)
 
     def __str__(self):
         return self.title

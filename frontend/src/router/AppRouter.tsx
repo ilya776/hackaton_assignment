@@ -4,8 +4,8 @@ import { APP_ROUTES_NAMES } from "./AppRouterNames";
 import ProfilePage from "@/pages/ProfilePage";
 import AuthPage from "@/pages/AuthPage.tsx";
 import LibraryPage from "@/pages/LibraryPage";
+import AboutBooks from "@/pages/AboutBooks.tsx";
 import BookPage from "@/pages/BookPage.tsx";
-import AllBooks from "@/pages/AllBooks.tsx";
 
 const AppRouter = [
   {
@@ -27,12 +27,12 @@ const AppRouter = [
             path: APP_ROUTES_NAMES.Root,
           },
           {
-            element: <AllBooks/>,
+            element: <BookPage/>,
             path: APP_ROUTES_NAMES.Library,
           },
           {
-            element: <BookPage/>,
-            path: APP_ROUTES_NAMES.Book + ":bookId",
+            element: <AboutBooks/>,
+            path: APP_ROUTES_NAMES.Library + ":bookId",
           },
         ],
       },
