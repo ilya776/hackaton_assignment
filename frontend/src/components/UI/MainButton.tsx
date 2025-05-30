@@ -15,7 +15,7 @@ const MainButton: FC<Props> = ({ onClick, className, text, type = undefined, dis
       type={type}
       onClick={onClick}
       className={
-        "w-full text-xl cursor-pointer bg-gr-main/70 hover:bg-gr-main text-[#3d5c3d] font-semibold py-3 px-6 rounded-xl transition-colors text-nowrap " +
+        "w-full text-xl cursor-pointer bg-gr-main/70 hover:bg-gr-main text-gr-darkest font-semibold py-3 px-6 rounded-xl transition-colors text-nowrap " +
         className
       }
     >
