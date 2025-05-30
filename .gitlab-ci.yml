@@ -7,6 +7,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
   PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
+  SSH_PRIVATE_KEY_PATH: "~/.ssh/id_rsa"
 
 .default_job: &default_job
   image: docker:latest
