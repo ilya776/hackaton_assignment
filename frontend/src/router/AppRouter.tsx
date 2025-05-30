@@ -4,7 +4,6 @@ import { APP_ROUTES_NAMES } from "./AppRouterNames";
 import ProfilePage from "@/pages/ProfilePage";
 import AuthPage from "@/pages/AuthPage.tsx";
 import LibraryPage from "@/pages/LibraryPage";
-import BookPage from "@/pages/BookPage.tsx";
 import AllBooks from "@/pages/AllBooks";
 const AppRouter = [
   {

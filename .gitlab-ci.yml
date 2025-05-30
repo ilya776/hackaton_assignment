@@ -6,8 +6,8 @@ variables:
   ENV_NAME: "prod"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
-  SSH_PRIVATE_KEY_PATH: "/tmp/deploy_key.pem"
-  PROJECT_DIR: "/home/ubuntu/hacathon"
+  SSH_PRIVATE_KEY_PATH: "/tmp/lntu-student.pem"
+  PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
 
 .default_job: &default_job
   image: docker:latest
