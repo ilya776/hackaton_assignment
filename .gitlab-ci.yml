@@ -30,7 +30,7 @@ deploy_prod:
   <<: *default_job
   stage: deploy
   only:
-    - main  # виконувати тільки при пуші в main
+    - main
   script:
     - ssh lntu-server '
       set -e
