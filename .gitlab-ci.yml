@@ -17,6 +17,7 @@ variables:
     # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
     # Write SSH private key to file and set correct permissions
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
