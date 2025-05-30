@@ -4,6 +4,8 @@ stages:
 
 variables:
   PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
+  ENV_NAME: "prod"
+  DOCKER_TLS_CERTDIR: ""
 
 .default_job: &default_job
   image: docker:latest
@@ -22,16 +24,21 @@ build:
   <<: *default_job
   stage: build
   script:
-    - docker compose -f docker-compose.prod.yml build
+    - docker compose -f docker-compose.${ENV_NAME}.yml build
 
 deploy_prod:
   <<: *default_job
   stage: deploy
+  only:
+    - main  # виконувати тільки при пуші в main
   script:
     - ssh lntu-server '
+      set -e
       cd "$PROJECT_DIR"
+      git reset --hard
       git pull origin main
       docker compose -f docker-compose.prod.yml down
       docker compose -f docker-compose.prod.yml up -d --build
       docker image prune -f
       '
+  retry: 2
