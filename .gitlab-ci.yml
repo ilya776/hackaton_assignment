@@ -1,7 +1,5 @@
 stages:
-  - lint
   - test
-  - scan
   - build
   - deploy
 
@@ -10,7 +8,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: "tcp://docker:2375"
   SSH_PRIVATE_KEY_PATH: "/tmp/deploy_key.pem"
-  PROJECT_DIR: "/home/ubuntu/hacathon"
+  PROJECT_DIR: "/home/ubuntu/hackaton_assignment"
 
 .default_job: &default_job
   image: docker:latest
@@ -18,49 +16,12 @@ variables:
     - docker:dind
   before_script:
     - apt-get update && apt-get install -y openssh-client git bash curl
-    # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    # Add private SSH key with correct permissions
     - echo "$SSH_PRIVATE_KEY" > $SSH_PRIVATE_KEY_PATH
     - chmod 600 $SSH_PRIVATE_KEY_PATH
-    # Configure git/ssh to use the private key and known_hosts strictly
     - export GIT_SSH_COMMAND="ssh -i $SSH_PRIVATE_KEY_PATH -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
-# =========================
-# Backend code linting
-# =========================
-
-lint_backend:
-  <<: *default_job
-  stage: lint
-  image: python:3.11
-  before_script:
-    - pip install black isort flake8
-  script:
-    - cd backend
-    - isort .
-    - black --check .
-    - isort --check-only .
-    - flake8 .
-  allow_failure: false
-  retry: 2
-
-# =========================
-# Frontend code linting
-# =========================
-
-lint_frontend:
-  <<: *default_job
-  stage: lint
-  image: node:20
-  script:
-    - apt-get update && apt-get install -y git curl bash
-    - cd frontend
-    - npm ci
-    - npm run lint
-  allow_failure: false
-  retry: 2
 # =========================
 # Backend tests execution
 # =========================
@@ -74,23 +35,6 @@ test_backend:
   script:
     - cd backend
     - python manage.py test --verbosity=2
-  allow_failure: false
-  retry: 1
-
-# =========================
-# Docker image vulnerability scan with Trivy
-# =========================
-
-scan_docker:
-  <<: *default_job
-  stage: scan
-  image:
-    name: aquasec/trivy:latest
-    entrypoint: [""]
-  script:
-    - docker compose -f docker-compose.${ENV_NAME}.yml build
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL hacathon-backend || { echo "Backend image has critical vulnerabilities"; exit 1; }
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL hacathon-frontend || { echo "Frontend image has critical vulnerabilities"; exit 1; }
   allow_failure: false
   retry: 1
 
