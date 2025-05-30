@@ -26,16 +26,20 @@ const AllBooks = () => {
         isLoading: boolean;
     };
 
-     const years = ["all", "2023", "2022", "2021", "2020"];
-    console.log(books);
-    const filteredBooks = useMemo(() => {
-        return books.filter(book => {
-            const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesGenre = selectedGenre === 'all' || book.genre.includes(selectedGenre);
-            const matchesYear = selectedYear === 'all' || book.year.toString() === selectedYear;
-            return matchesSearch && matchesGenre && matchesYear;
-        });
-    }, [books, searchQuery, selectedGenre, selectedYear]);
+    const years = ["all", "2023", "2022", "2021", "2020"];
+
+    const genres = useMemo(() => {
+        const allGenres = books.flatMap(book => book.genre);
+        const uniqueGenres = Array.from(new Set(allGenres));
+        return ['all', ...uniqueGenres];
+    }, [books]);
+
+    const filteredBooks = books.filter(book => {
+        const matchesSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesGenre = selectedGenre === 'all' || book.genre.includes(selectedGenre);
+        const matchesYear = selectedYear === 'all' || book.year.toString() === selectedYear;
+        return matchesSearch && matchesGenre && matchesYear;
+    });
 
     if (isLoading) return <p>Завантаження...</p>;
     if (error) return <p>Помилка при завантаженні книг</p>;
@@ -44,11 +48,6 @@ const AllBooks = () => {
     const buttonBase = "p-2 rounded";
     const active = "bg-blue-500 text-white";
     const inactive = "bg-gray-200";
-    const genres = useMemo(() => {
-        const allGenres = books.flatMap(book => book.genre);
-        const uniqueGenres = Array.from(new Set(allGenres));
-        return ['all', ...uniqueGenres];
-    }, [books]);
 
     return (
         <div className="container mx-auto px-4 py-8">
