@@ -17,10 +17,11 @@ variables:
     # Setup SSH known hosts for secure connection (prevents man-in-the-middle)
     - mkdir -p ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    # Set correct permissions for the SSH key
-    - chmod 600 "$SSH_PRIVATE_KEY"
+    # Write SSH private key to file and set correct permissions
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
     # Configure git/ssh to use the private key and known_hosts strictly
-    - export GIT_SSH_COMMAND="ssh -i $SSH_PRIVATE_KEY -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
+    - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=~/.ssh/known_hosts -o StrictHostKeyChecking=yes"
 
 # =========================
 # Build Docker images for environment
@@ -46,7 +47,7 @@ deploy_prod:
     name: production
     url: https://your-production-url.example.com
   script:
-    - ssh -o StrictHostKeyChecking=yes -i "$SSH_PRIVATE_KEY" ubuntu@18.197.176.80 "
+    - ssh -o StrictHostKeyChecking=yes -i ~/.ssh/id_rsa ubuntu@18.197.176.80 "
       cd $PROJECT_DIR &&
       git reset --hard &&
       git pull origin main &&
