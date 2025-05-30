@@ -46,11 +46,11 @@ const AuthForm: FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f6fff4] text-[#3d5c3d] py-4">
-      <div className="w-full max-w-md bg-[#e4fbe1] p-10 rounded-3xl shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gr-lightest text-gr-darkest py-4">
+      <div className="w-full max-w-md bg-gr-light p-10 rounded-3xl shadow-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-3">{mode === "login" ? "Вхід до акаунту" : "Створіть акаунт"}</h1>
-          <p className="text-[#6d8d6d] text-sm">
+          <p className="text-gr-dark text-sm">
             {mode === "login"
               ? "Увійдіть, використовуючи свої облікові дані"
               : "Заповніть форму нижче, щоб зареєструватися"}
@@ -60,14 +60,14 @@ const AuthForm: FC = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           {mode === "register" && (
             <label className="block">
-              <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Ім'я користувача</span>
+              <span className="block text-sm font-medium text-gr-dark mb-1">Ім'я користувача</span>
               <input
                 type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Ваше ім'я користувача"
-                className="w-full px-4 py-3 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
+                className="w-full px-4 py-3 bg-white text-gr-darkest border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-gr-main placeholder:text-gr-main"
                 required
                 minLength={3}
               />
@@ -75,34 +75,34 @@ const AuthForm: FC = () => {
           )}
 
           <label className="block">
-            <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Email</span>
+            <span className="block text-sm font-medium text-gr-dark mb-1">Email</span>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="w-full px-4 py-3 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
+              className="w-full px-4 py-3 bg-white text-gr-darkest border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-gr-main placeholder:text-gr-main"
               required
             />
           </label>
 
           <label className="block relative">
-            <span className="block text-sm font-medium text-[#6d8d6d] mb-1">Пароль</span>
+            <span className="block text-sm font-medium text-gr-dark mb-1">Пароль</span>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="********"
-              className="w-full px-4 py-3 pr-12 bg-white text-[#3d5c3d] border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a2e4a6] placeholder:text-[#a2b9a2]"
+              className="w-full px-4 py-3 pr-12 bg-white text-gr-darkest border border-[#bdeac2] rounded-xl focus:outline-none focus:ring-2 focus:ring-gr-main placeholder:text-gr-main"
               required
               minLength={6}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-[#6d8d6d] hover:text-[#3d5c3d] transition-colors"
+              className="absolute right-3 top-[38px] text-gr-dark hover:text-gr-darkest transition-colors"
               aria-label={showPassword ? "Сховати пароль" : "Показати пароль"}
             >
               {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
@@ -114,19 +114,19 @@ const AuthForm: FC = () => {
           <button
             type="submit"
             disabled={isLoggingIn || isRegistering}
-            className="w-full py-3 bg-[#a2e4a6] hover:bg-[#8fd793] rounded-xl text-[#3d5c3d] font-semibold transition-colors disabled:opacity-50"
+            className="w-full py-3 bg-gr-main hover:bg-[#8fd793] rounded-xl text-gr-darkest font-semibold transition-colors disabled:opacity-50"
           >
             {isLoggingIn || isRegistering ? "Обробка..." : mode === "login" ? "Увійти" : "Зареєструватися"}
           </button>
 
-          <div className="text-center text-sm text-[#6d8d6d] mt-4">
+          <div className="text-center text-sm text-gr-dark mt-4">
             {mode === "login" ? (
               <>
                 <p>Не маєте акаунту?</p>
                 <button
                   type="button"
                   onClick={() => setMode("register")}
-                  className="text-[#3d5c3d] font-medium hover:underline"
+                  className="text-gr-darkest font-medium hover:underline"
                 >
                   Зареєструватися
                 </button>
@@ -137,7 +137,7 @@ const AuthForm: FC = () => {
                 <button
                   type="button"
                   onClick={() => setMode("login")}
-                  className="text-[#3d5c3d] font-medium hover:underline"
+                  className="text-gr-darkest font-medium hover:underline"
                 >
                   Увійти
                 </button>
